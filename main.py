@@ -11,7 +11,13 @@ class Name(Field):
 		pass
 
 class Phone(Field):
-		pass
+	def __init__(self, value):
+		number = value.lstrip("+")
+		if not number.isdigit():
+			raise ValueError("Phone number must contain only digits")
+		if len(number) < 7 or len(number) > 15:
+			raise ValueError("Phone number must be between 7 and 15 digits")
+		super().__init__(value)
 
 class Record:
 	def __init__(self, name):
@@ -25,16 +31,13 @@ class Record:
 		phone_obj = self.find_phone(phone)
 		if phone_obj:
 			self.phones.remove(phone_obj)
+		else:
+			raise ValueError("Incorrect number")
 
 	def edit_phone(self, old_phone, new_phone):
-		try:
-			for i, phone in enumerate(self.phones):
-				if phone.value == old_phone:
-					self.phones[i] = Phone(new_phone)
-					return
-			print("Phone not found")
-		except ValueError:
-			print("Incorrect number")
+		self.remove_phone(old_phone)
+		self.add_phone(new_phone)
+
 
 	def find_phone(self, number):
 		for phone in self.phones:
