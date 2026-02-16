@@ -12,11 +12,10 @@ class Name(Field):
 
 class Phone(Field):
 	def __init__(self, value):
-		number = value.lstrip("+")
-		if not number.isdigit():
+		if not value.isdigit():
 			raise ValueError("Phone number must contain only digits")
-		if len(number) < 7 or len(number) > 15:
-			raise ValueError("Phone number must be between 7 and 15 digits")
+		if len(value) != 10:
+			raise ValueError("Phone number must be 10 digits")
 		super().__init__(value)
 
 class Record:
@@ -35,7 +34,6 @@ class Record:
 			raise ValueError("Incorrect number")
 
 	def edit_phone(self, old_phone, new_phone):
-		self.remove_phone(old_phone)
 		self.add_phone(new_phone)
 		self.remove_phone(old_phone)
 
@@ -91,6 +89,7 @@ book.add_record(jane_record)
 # Виведення всіх записів у книзі
 
 print(book)
+
 
 # Знаходження та редагування телефону для John
 john = book.find("John")
